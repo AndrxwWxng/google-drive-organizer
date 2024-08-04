@@ -7,14 +7,27 @@ from google.auth.transport.requests import Request
 from config import SCOPES, CREDENTIALS_FILE, TOKEN_FILE
 
 def get_drive_service():
-    #
+    creds = None
+    if os.path.exists(TOKEN_FILE):
+        with open(TOKEN_FILE, 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file(
+                CREDENTIALS_FILE, SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open(TOKEN_FILE, 'wb') as token:
+            pickle.dump(creds, token)
+    return build('drive', 'v3', credentials=creds)
 
 def sort_files(service):
-    #
+    results = service.files().list(
+        pageSize=1000, fields="nextPageToken, files(id, name)").execute()
+    items = results.get('files', [])
 
-def main():
-    service = get_drive_service()
-    sort_files(service)
-
-if __name__ == '__main__':
-    main()
+    if not items:
+        return []
+    else:
+        return sorted(items, key=lambda x: x['name'].lower())

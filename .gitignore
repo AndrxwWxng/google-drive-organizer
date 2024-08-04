@@ -1,1 +1,12 @@
+
+credentials.json
+token.pickle
+*.pickle
+
 .venv/
+
+__pycache__/
+*.pyc
+
+.DS_Store
+*.log
