@@ -32,3 +32,25 @@ def search_files(service, keyword):
     else:
         filtered_items = [item for item in items if keyword.lower() in item['name'].lower()]
         return sorted(filtered_items, key=lambda x: x['name'].lower())
+    
+def create_folder(service, folder_name):
+    file_metadata = {
+        'name': folder_name,
+        'mimeType': 'application/vnd.google-apps.folder'
+    }
+    folder = service.files().create(body=file_metadata, fields='id').execute()
+    return folder.get('id')
+
+def move_files_to_folder(service, file_ids, folder_id):
+    for file_id in file_ids:
+        
+        file_metadata = service.files().get(fileId=file_id, fields='parents').execute()
+        previous_parents = ','.join(file_metadata.get('parents'))
+        
+       
+        service.files().update(
+            fileId=file_id,
+            addParents=folder_id,
+            removeParents=previous_parents,
+            fields='id, parents'
+        ).execute()
