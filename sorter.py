@@ -22,7 +22,7 @@ def get_drive_service():
             pickle.dump(creds, token)
     return build('drive', 'v3', credentials=creds)
 
-def sort_files(service):
+def sort_files(service, keyword):
     results = service.files().list(
         pageSize=1000, fields="nextPageToken, files(id, name)").execute()
     items = results.get('files', [])
@@ -30,4 +30,5 @@ def sort_files(service):
     if not items:
         return []
     else:
-        return sorted(items, key=lambda x: x['name'].lower())
+        filtered_items = [item for item in items if keyword.lower() in item['name'].lower()]
+        return sorted(filtered_items, key=lambda x: x['name'].lower())
