@@ -22,7 +22,7 @@ def get_drive_service():
             pickle.dump(creds, token)
     return build('drive', 'v3', credentials=creds)
 
-def sort_files(service, keyword):
+def search_files(service, keyword):
     results = service.files().list(
         pageSize=1000, fields="nextPageToken, files(id, name)").execute()
     items = results.get('files', [])
