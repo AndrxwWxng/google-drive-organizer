@@ -17,7 +17,7 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation
 1. Clone this repository:
-git clone https://github.com/yourusername/google-drive-file-sorter.git
+git clone [https://github.com/yourusername/google-drive-file-sorter.git](https://github.com/AndrxwWxng/google-drive-organizer.git)
 2. Navigate to the project directory:
 cd google-drive-file-sorter
 3. Install the required packages:
