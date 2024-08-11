@@ -27,7 +27,9 @@ def search_files(service, keyword):
     return search_items(service, query)
 
 def search_folders(service, keyword):
-    query = f"name contains '{keyword}' and mimeType = 'application/vnd.google-apps.folder'"
+    query = f"mimeType = 'application/vnd.google-apps.folder'"
+    if keyword:
+        query += f" and name contains '{keyword}'"
     return search_items(service, query)
 
 def search_items(service, query):
